@@ -1,43 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const ytdl = require("ytdl-core");
+app.get('/download', (req, res) => {
+    const { platform, videoId } = req.query;
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+    if (!platform || !videoId) {
+        return res.status(400).json({ error: 'Platform and videoId are required' });
+    }
 
-// Enable CORS for all routes
-app.use(cors());
+    let downloadUrl = '';
 
-// Root check
-app.get("/", (req, res) => {
-  res.send("Video Downloader Backend is Running.");
-});
+    if (platform === 'instagram') {
+        // Handle Instagram video download logic (using Instagram video ID)
+        downloadUrl = `https://www.instagram.com/reel/${videoId}/download`;
+    } else if (platform === 'youtube') {
+        // Handle YouTube video download logic (using YouTube video ID)
+        downloadUrl = `https://youtube.com/shorts/${videoId}/download`;
+    } else {
+        return res.status(400).json({ error: 'Unsupported platform' });
+    }
 
-// Download endpoint
-app.get("/download", async (req, res) => {
-  const videoUrl = req.query.url;
-
-  if (!videoUrl) {
-    return res.status(400).json({ error: "Missing video URL" });
-  }
-
-  try {
-    const info = await ytdl.getInfo(videoUrl);
-    const format = ytdl.chooseFormat(info.formats, {
-      quality: "highestvideo",
-      filter: (format) => format.container === "mp4",
-    });
-
-    res.header("Content-Disposition", `attachment; filename="video.mp4"`);
-
-    ytdl(videoUrl, { format })
-      .pipe(res);
-  } catch (error) {
-    console.error("Download Error:", error.message);
-    res.status(500).json({ error: "Failed to process the video." });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    // Send the download URL back
+    res.json({ downloadUrl });
 });
