@@ -9,22 +9,31 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
     // Show loading spinner
     document.getElementById('loadingSpinner').style.display = 'block';
 
-    // Simulating backend request to download video (replace with actual backend logic)
-    setTimeout(() => {
-        // Hide loading spinner
-        document.getElementById('loadingSpinner').style.display = 'none';
+    // Send the request to the backend
+    fetch(`https://instadownload-production.up.railway.app/download?url=${encodeURIComponent(videoUrl)}`)
+        .then(response => response.json())  // Assuming the backend sends a JSON with download URL
+        .then(data => {
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
 
-        // Assuming backend sends a download URL after processing
-        const downloadLink = "https://example.com/video_download_link.mp4"; // replace with actual backend URL
-
-        // Show download success
-        Swal.fire({
-            title: 'Download Ready!',
-            text: 'Click below to download your video.',
-            icon: 'success',
-            confirmButtonText: 'Download',
-        }).then(() => {
-            window.location.href = downloadLink; // simulate download
+            if (data && data.downloadUrl) {
+                // Assuming backend sends a field 'downloadUrl'
+                Swal.fire({
+                    title: 'Download Ready!',
+                    text: 'Click below to download your video.',
+                    icon: 'success',
+                    confirmButtonText: 'Download',
+                }).then(() => {
+                    window.location.href = data.downloadUrl;  // Actual download link from backend
+                });
+            } else {
+                Swal.fire('Error', 'Could not process the video. Please try again!', 'error');
+            }
+        })
+        .catch(error => {
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
+            Swal.fire('Error', 'There was an error fetching the video. Please try again!', 'error');
+            console.error('Error:', error);
         });
-    }, 2000); // Simulating network delay
 });
