@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- For pop-up alerts -->
+</head>
+<body>
+    <!-- Main container -->
+    <div class="container">
+        <header>
+            <h1>HD Video Downloader</h1>
+            <div class="social-icons">
+                <a href="https://www.instagram.com" target="_blank">
+                    <img src="instagram-icon.png" alt="Instagram" class="social-icon">
+                </a>
+                <a href="https://www.youtube.com" target="_blank">
+                    <img src="youtube-icon.png" alt="YouTube" class="social-icon">
+                </a>
+            </div>
+        </header>
+
+        <!-- URL Input Section -->
+        <div class="input-section">
+            <label for="videoUrl">Enter Video URL</label>
+            <input type="text" id="videoUrl" placeholder="Paste your video URL here...">
+            <button id="downloadBtn">Download</button>
+        </div>
+
+        <!-- Animation Section -->
+        <div class="animation">
+            <div class="loading-spinner" id="loadingSpinner"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
